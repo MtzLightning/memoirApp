@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+        - name: dep
+          image: mtzlight/dep:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: "192.168.64.1"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "taskmanagement"
+            - name: DB_USERNAME
+              value: "postgres"
+            - name: DB_PASSWORD
+              value: "1234"
+          volumeMounts:
+            - name: app-volume
+              mountPath: /app/com/card/card/write
+      volumes:
+        - name: app-volume
+          hostPath:
+            path: /app/com/card/card/write
